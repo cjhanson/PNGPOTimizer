@@ -11,6 +11,8 @@
 		37ACA37D1153E4A900E5E9CF /* ImageOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ACA37C1153E4A900E5E9CF /* ImageOperations.m */; };
 		37ACA59F115409A700E5E9CF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA59E115409A700E5E9CF /* AppKit.framework */; };
 		37ACA6411154156C00E5E9CF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA6401154156C00E5E9CF /* QuartzCore.framework */; };
+		37ACA77E11548AB900E5E9CF /* GetPathsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ACA77B11548AB900E5E9CF /* GetPathsOperation.m */; };
+		37ACA86E11548B0C00E5E9CF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA86D11548B0C00E5E9CF /* Cocoa.framework */; };
 		8DD76F9A0486AA7600D96B5E /* PNGPOTimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* PNGPOTimizer.m */; settings = {ATTRIBUTES = (); }; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
 		8DD76F9F0486AA7600D96B5E /* PNGPOTimizer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859EA3029092ED04C91782 /* PNGPOTimizer.1 */; };
@@ -38,6 +40,9 @@
 		37ACA37C1153E4A900E5E9CF /* ImageOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageOperations.m; sourceTree = "<group>"; };
 		37ACA59E115409A700E5E9CF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		37ACA6401154156C00E5E9CF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		37ACA77A11548AB800E5E9CF /* GetPathsOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPathsOperation.h; sourceTree = "<group>"; };
+		37ACA77B11548AB900E5E9CF /* GetPathsOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPathsOperation.m; sourceTree = "<group>"; };
+		37ACA86D11548B0C00E5E9CF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8DD76FA10486AA7600D96B5E /* PNGPOTimizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PNGPOTimizer; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859EA3029092ED04C91782 /* PNGPOTimizer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = PNGPOTimizer.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -51,6 +56,7 @@
 				37ACA2B51153CD9500E5E9CF /* ApplicationServices.framework in Frameworks */,
 				37ACA59F115409A700E5E9CF /* AppKit.framework in Frameworks */,
 				37ACA6411154156C00E5E9CF /* QuartzCore.framework in Frameworks */,
+				37ACA86E11548B0C00E5E9CF /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +77,7 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				37ACA7721154444200E5E9CF /* PathOps */,
 				32A70AAB03705E1F00C91783 /* PNGPOTimizer_Prefix.pch */,
 				08FB7796FE84155DC02AAC07 /* PNGPOTimizer.m */,
 				37ACA37B1153E4A900E5E9CF /* ImageOperations.h */,
@@ -86,6 +93,7 @@
 				37ACA2B41153CD9500E5E9CF /* ApplicationServices.framework */,
 				37ACA59E115409A700E5E9CF /* AppKit.framework */,
 				37ACA6401154156C00E5E9CF /* QuartzCore.framework */,
+				37ACA86D11548B0C00E5E9CF /* Cocoa.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -96,6 +104,15 @@
 				8DD76FA10486AA7600D96B5E /* PNGPOTimizer */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		37ACA7721154444200E5E9CF /* PathOps */ = {
+			isa = PBXGroup;
+			children = (
+				37ACA77A11548AB800E5E9CF /* GetPathsOperation.h */,
+				37ACA77B11548AB900E5E9CF /* GetPathsOperation.m */,
+			);
+			name = PathOps;
 			sourceTree = "<group>";
 		};
 		C6859EA2029092E104C91782 /* Documentation */ = {
@@ -151,6 +168,7 @@
 			files = (
 				8DD76F9A0486AA7600D96B5E /* PNGPOTimizer.m in Sources */,
 				37ACA37D1153E4A900E5E9CF /* ImageOperations.m in Sources */,
+				37ACA77E11548AB900E5E9CF /* GetPathsOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,4 +7,15 @@
  *
  */
 
-int padImageFilePOT(const char *filePath);
+int padImageFilePOT(NSString *filePath);
+
+// NSNotification name to tell the Window controller an image file as found
+extern NSString *POTImageDidFinishNotification;
+
+@interface POTImageOperation : NSOperation
+{
+	NSString *loadPath;
+}
+
+- (id)initWithPath:(NSString *)path;
+@end

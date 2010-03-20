@@ -1,23 +1,31 @@
 #import <Foundation/Foundation.h>
+#import "GetPathsOperation.h"
 #import "ImageOperations.h"
+
+NSString *getStringPathFromCString(const char *path);
 
 int main (int argc, const char * argv[]) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-
+	
+	NSOperationQueue *opQueue	= [[NSOperationQueue alloc] init];
+	Class opClass				= [POTImageOperation class];
     // insert code here...
-	int totalConversions = 0;
 	for(int i=1; i<argc; i++){
 		NSAutoreleasePool *loopPool = [NSAutoreleasePool new];
-		totalConversions += padImageFilePOT(argv[i]);
+		NSString *path				= [NSString stringWithCString:argv[i] encoding:NSUTF8StringEncoding];
+		NSOperation *anOp			= [[[GetPathsOperation alloc] initWithRootPath:path operationClass:opClass queue:opQueue] autorelease];
+		[opQueue addOperation:anOp];
 		[loopPool drain];
 	}
-/*
-	const char *filePath = "../../../Git_iDance-uDance/Media/Images/Default.png";
-	NSLog(@"Debug convert file %s", filePath);
-	totalConversions += padImageFilePOT(filePath);
-*/
-	NSLog(@"Converted %d/%d images.", totalConversions, argc-1);
+	
+	while([opQueue operationCount] > 0){
+		
+	}
+	
+	[opQueue release];
+	
     [pool drain];
     return 0;
 }
+
 

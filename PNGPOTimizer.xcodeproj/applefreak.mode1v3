@@ -270,15 +270,20 @@
 							<array>
 								<string>08FB7794FE84155DC02AAC07</string>
 								<string>08FB7795FE84155DC02AAC07</string>
+								<string>37ACA7721154444200E5E9CF</string>
 								<string>C6859EA2029092E104C91782</string>
 								<string>08FB779DFE84155DC02AAC07</string>
+								<string>08FB779EFE84155DC02AAC07</string>
+								<string>37ACA2B41153CD9500E5E9CF</string>
+								<string>37ACA59E115409A700E5E9CF</string>
+								<string>37ACA6401154156C00E5E9CF</string>
 								<string>1AB674ADFE9D54B511CA2CBB</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>10</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -333,7 +338,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>37ACA696115424ED00E5E9CF</string>
+										<string>37ACA89B115493CF00E5E9CF</string>
 										<key>history</key>
 										<array>
 											<string>37ACA3A71153E6A300E5E9CF</string>
@@ -352,13 +357,10 @@
 											<string>37ACA3C41153E6A300E5E9CF</string>
 											<string>37ACA3C61153E6A300E5E9CF</string>
 											<string>37ACA3C81153E6A300E5E9CF</string>
-											<string>37ACA3CA1153E6A300E5E9CF</string>
 											<string>37ACA3D31153E6A300E5E9CF</string>
 											<string>37ACA4281153FB7000E5E9CF</string>
 											<string>37ACA42C1153FB7000E5E9CF</string>
-											<string>37ACA4501153FE7A00E5E9CF</string>
 											<string>37ACA4521153FE7A00E5E9CF</string>
-											<string>37ACA497115402B400E5E9CF</string>
 											<string>37ACA498115402B400E5E9CF</string>
 											<string>37ACA49A115402B400E5E9CF</string>
 											<string>37ACA5A211540E7000E5E9CF</string>
@@ -373,8 +375,18 @@
 											<string>37ACA65611541B2B00E5E9CF</string>
 											<string>37ACA65911541B2B00E5E9CF</string>
 											<string>37ACA66311541EEB00E5E9CF</string>
-											<string>37ACA694115424ED00E5E9CF</string>
-											<string>37ACA695115424ED00E5E9CF</string>
+											<string>37ACA735115436A900E5E9CF</string>
+											<string>37ACA75E11543D3100E5E9CF</string>
+											<string>37ACA87B1154927A00E5E9CF</string>
+											<string>37ACA87C1154927A00E5E9CF</string>
+											<string>37ACA87D1154927A00E5E9CF</string>
+											<string>37ACA87F1154927A00E5E9CF</string>
+											<string>37ACA8841154927A00E5E9CF</string>
+											<string>37ACA88B115492DC00E5E9CF</string>
+											<string>37ACA88C115492DC00E5E9CF</string>
+											<string>37ACA8911154937500E5E9CF</string>
+											<string>37ACA8921154937500E5E9CF</string>
+											<string>37ACA8931154937500E5E9CF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -603,7 +615,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ImageOperations.m</string>
+								<string>GetPathsOperation.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>

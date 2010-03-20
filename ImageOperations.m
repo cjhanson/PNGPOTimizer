@@ -129,31 +129,187 @@ NSBitmapImageRep *outputBitmapImageRepFromCIImage(CIImage *ciImage)
     return [bitmapImageRep autorelease];
 }
 
-int padImageFilePOT(const char *filePath)
-{	
-	NSString *filePathString				= [NSString stringWithCString:filePath encoding:NSUTF8StringEncoding];
+int padImageFilePOT(NSString *filePath)
+{		
+	if([[filePath lastPathComponent] isEqualToString:@"Default.png"]){
+		NSLog(@"Skipping Default.png");
+		return 0;
+	}
+	if([[filePath lastPathComponent] isEqualToString:@"Icon-Home.png"]){
+		NSLog(@"Skipping Icon-Home.png");
+		return 0;
+	}
+	if([[filePath lastPathComponent] isEqualToString:@"Icon-Small.png"]){
+		NSLog(@"Skipping Icon-Small.png");
+		return 0;
+	}
 	
-	NSBitmapImageRep *inputBitmapImageRep	= BitmapImageRepFromNSImage([[[NSImage alloc] initWithContentsOfFile:filePathString] autorelease]);
+	NSBitmapImageRep *inputBitmapImageRep	= BitmapImageRepFromNSImage([[[NSImage alloc] initWithContentsOfFile:filePath] autorelease]);
 	CIImage *image							= [[[CIImage alloc] initWithBitmapImageRep:inputBitmapImageRep] autorelease];
 	if(!image){
-		NSLog(@"Failed to load image %s", filePath);
+		NSLog(@"Failed to load image %@", filePath);
 		return 0;
 	}
 	
 	NSBitmapImageRep *outputBitmapImageRep	= outputBitmapImageRepFromCIImage(image);
 	if(!outputBitmapImageRep){
-		NSLog(@"Didn't expand image size %s", filePath);
+		NSLog(@"Didn't expand image size %@", filePath);
 		return 0;
 	}
 		
-	NSString *filePathDest				= filePathString;//[[[filePathString stringByDeletingPathExtension] stringByAppendingString:@"_POT"] stringByAppendingPathExtension:@"png"];
-
 	NSData *outputData					= [outputBitmapImageRep representationUsingType:NSPNGFileType properties:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], NSImageInterlaced, nil]];
 	
-	if(![outputData writeToFile:filePathDest atomically:YES]){
-		NSLog(@"Failed to write image %s", filePath);
+	if(![outputData writeToFile:filePath atomically:YES]){
+		NSLog(@"Failed to write image %@", filePath);
 		return 0;
 	}
 	
 	return 1;
 }
+
+@implementation POTImageOperation
+
+// NSNotification name to tell the Window controller an image file as found
+NSString *POTImageDidFinishNotification = @"POTImageDidFinishNotification";
+
+// -------------------------------------------------------------------------------
+//	initWithPath:path
+// -------------------------------------------------------------------------------
+- (id)initWithPath:(NSString *)path
+{
+	self = [super init];
+    loadPath = [path retain];
+    return self;
+}
+
+// -------------------------------------------------------------------------------
+//	dealloc:
+// -------------------------------------------------------------------------------
+- (void)dealloc
+{
+    [loadPath release];
+    [super dealloc];
+}
+
+// -------------------------------------------------------------------------------
+//	isImageFile:filePath
+//
+//	Uses LaunchServices and UTIs to detect if a given file path is an image file.
+// -------------------------------------------------------------------------------
+- (BOOL)isImageFile:(NSString *)filePath
+{
+    BOOL isImageFile = NO;
+    FSRef fileRef;
+    Boolean isDirectory;
+	
+    if (FSPathMakeRef((const UInt8 *)[filePath fileSystemRepresentation], &fileRef, &isDirectory) == noErr)
+    {
+        // get the content type (UTI) of this file
+        CFDictionaryRef values = NULL;
+        CFStringRef attrs[1] = { kLSItemContentType };
+        CFArrayRef attrNames = CFArrayCreate(NULL, (const void **)attrs, 1, NULL);
+		
+        if (LSCopyItemAttributes(&fileRef, kLSRolesViewer, attrNames, &values) == noErr)
+        {
+            // verify that this is a file that the Image I/O framework supports
+            if (values != NULL)
+            {
+                CFTypeRef uti = CFDictionaryGetValue(values, kLSItemContentType);
+                if (uti != NULL)
+                {
+                    CFArrayRef supportedTypes = CGImageSourceCopyTypeIdentifiers();
+                    CFIndex i, typeCount = CFArrayGetCount(supportedTypes);
+					
+                    for (i = 0; i < typeCount; i++)
+                    {
+                        CFStringRef supportedUTI = CFArrayGetValueAtIndex(supportedTypes, i);
+						
+                        // make sure the supported UTI conforms only to "public.image" (this will skip PDF)
+                        if (UTTypeConformsTo(supportedUTI, CFSTR("public.image")))
+                        {
+                            if (UTTypeConformsTo(uti, supportedUTI))
+                            {
+                                isImageFile = YES;
+                                break;
+                            }
+                        }
+                    }
+					
+                    CFRelease(supportedTypes);
+                }
+				
+                CFRelease(values);
+            }
+        }
+		
+        CFRelease(attrNames);
+    }
+	
+    return isImageFile;
+}
+
+// -------------------------------------------------------------------------------
+//	main:
+//
+//	Examine the given file (from the NSURL "loadURL") to see it its an image file.
+//	If an image file examine further and report its file attributes.
+//
+//	We could use NSFileManager, but to be on the safe side we will use the
+//	File Manager APIs to get the file attributes.
+// -------------------------------------------------------------------------------
+-(void)main
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	if (![self isCancelled])
+	{
+		// test to see if it's an image file
+		if ([self isImageFile: loadPath])
+		{
+			// in this example, we just get the file's info (mod date, file size) and report it to the table view
+			//
+			FSRef ref;
+			Boolean isDirectory;
+			if (FSPathMakeRef((const UInt8 *)[loadPath fileSystemRepresentation], &ref, &isDirectory) == noErr)
+			{
+				FSCatalogInfo catInfo;
+				if (FSGetCatalogInfo(&ref, (kFSCatInfoContentMod | kFSCatInfoDataSizes), &catInfo, nil, nil, nil) == noErr)
+				{
+					CFAbsoluteTime cfTime;
+					if (UCConvertUTCDateTimeToCFAbsoluteTime(&catInfo.contentModDate, &cfTime) == noErr)
+					{
+						CFDateRef dateRef = nil;
+						dateRef = CFDateCreate(kCFAllocatorDefault, cfTime);
+						if (dateRef != nil)
+						{
+							if (![self isCancelled])
+							{
+								NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+								[formatter setTimeStyle:NSDateFormatterNoStyle];
+								[formatter setDateStyle:NSDateFormatterShortStyle];
+								
+								NSString *modDateStr = [formatter stringFromDate:(NSDate*)dateRef];
+								
+								NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+													  [loadPath lastPathComponent], @"name",
+													  [loadPath stringByDeletingLastPathComponent], @"path",
+													  modDateStr, @"modified",
+													  [NSString stringWithFormat:@"%ld", catInfo.dataPhysicalSize], @"size",
+													  [NSNumber numberWithInt:padImageFilePOT(loadPath)], @"result",
+													  nil];
+								
+								NSLog(@"Image processed: %@ %d", [info objectForKey:@"name"], [[info objectForKey:@"result"] intValue]);
+							}
+							
+							CFRelease(dateRef);
+						}
+					}
+				}		
+			}
+		}
+	}
+	
+	[pool release];
+}
+
+@end
