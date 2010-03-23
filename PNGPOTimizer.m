@@ -18,9 +18,7 @@ int main (int argc, const char * argv[]) {
 		[loopPool drain];
 	}
 	
-	while([opQueue operationCount] > 0){
-		
-	}
+	[opQueue waitUntilAllOperationsAreFinished];
 	
 	[opQueue release];
 	
