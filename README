@@ -1,0 +1,4 @@
+PNGPOTimizer is a commandline tool to convert images to PNG with dimensions that are POT (powers of two).
+This runs on the Mac with Snow Leopard.
+This skips files with the following names "Default.png" "Icon-Home.png" "Icon-Small.png"
+It runs on a list of files passed, or recursively through a directory
