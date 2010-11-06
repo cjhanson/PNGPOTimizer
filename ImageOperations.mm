@@ -303,9 +303,9 @@ int padImageFilePOT(NSString *filePath)
 			NSLog(@"CCZ Header: %@", [NSString stringWithCString:c encoding:NSASCIIStringEncoding]);
 		}
 #endif		
-		header->len					= OSSwapHostToLittleInt32(sourceLen);
-		header->version				= OSSwapHostToLittleInt32(1);
-		header->compression_type	= OSSwapHostToLittleInt32(CCZ_COMPRESSION_ZLIB);
+		header->len					= OSSwapHostToBigInt32(sourceLen);
+		header->version				= OSSwapHostToBigInt32(1);
+		header->compression_type	= OSSwapHostToBigInt32(CCZ_COMPRESSION_ZLIB);
 		
 		[data release];
 		data = compressed;

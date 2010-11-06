@@ -339,7 +339,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>3758ABFA1284EBDC0012A368</string>
+										<string>373160FC1284F742001D0A9F</string>
 										<key>history</key>
 										<array>
 											<string>37ACA3A81153E6A300E5E9CF</string>
@@ -409,7 +409,7 @@
 											<string>3758AB4F1284D5DA0012A368</string>
 											<string>3758AB601284D7FC0012A368</string>
 											<string>3758AB691284D8CC0012A368</string>
-											<string>3758AB6A1284D8CC0012A368</string>
+											<string>3758ABFA1284EBDC0012A368</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -421,14 +421,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {992, 569}}</string>
+								<string>{{0, 0}, {992, 568}}</string>
 								<key>RubberWindowFrame</key>
 								<string>37 165 1282 654 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>569pt</string>
+							<string>568pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -441,14 +441,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 574}, {992, 39}}</string>
+								<string>{{0, 573}, {992, 40}}</string>
 								<key>RubberWindowFrame</key>
 								<string>37 165 1282 654 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>39pt</string>
+							<string>40pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -467,9 +467,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3758A6C212830ED30012A368</string>
+				<string>373160FD1284F742001D0A9F</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>3758A6C312830ED30012A368</string>
+				<string>373160FE1284F742001D0A9F</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -607,10 +607,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3758AB571284D6420012A368</string>
-		<string>3758AB581284D6420012A368</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>37ACA22C1153C90200E5E9CF</string>
 		<string>/Users/applefreak/Workspace/Projects/iPhone/PNGPOTimizer/PNGPOTimizer.xcodeproj</string>
 	</array>
@@ -636,7 +632,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>PVRTexLibGlobals.h</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -653,8 +649,6 @@
 							<string>355pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -694,7 +688,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>37ACA22C1153C90200E5E9CF</string>
-				<string>3758A6C412830ED30012A368</string>
+				<string>373160FF1284F742001D0A9F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
