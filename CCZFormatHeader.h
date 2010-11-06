@@ -1,12 +1,4 @@
 /*
- *  CCZFormatHeader.h
- *  PNGPOTimizer
- *
- *  Created by CJ Hanson on 11/6/10.
- *  Copyright 2010 Hanson Interactive. All rights reserved.
- *  
- */
-/*
  Copyright (c) 2010 Andreas Loew / code-and-web.de
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
