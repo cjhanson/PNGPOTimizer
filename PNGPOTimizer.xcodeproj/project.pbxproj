@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3778E89D127F18D100879B9D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3778E89C127F18D100879B9D /* libz.dylib */; };
+		3778E89F127F1BAC00879B9D /* libPVRTexLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3778E89E127F1BAC00879B9D /* libPVRTexLib.a */; };
 		37ACA2B51153CD9500E5E9CF /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA2B41153CD9500E5E9CF /* ApplicationServices.framework */; };
-		37ACA37D1153E4A900E5E9CF /* ImageOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ACA37C1153E4A900E5E9CF /* ImageOperations.m */; };
+		37ACA37D1153E4A900E5E9CF /* ImageOperations.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37ACA37C1153E4A900E5E9CF /* ImageOperations.mm */; };
 		37ACA59F115409A700E5E9CF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA59E115409A700E5E9CF /* AppKit.framework */; };
 		37ACA6411154156C00E5E9CF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37ACA6401154156C00E5E9CF /* QuartzCore.framework */; };
 		37ACA77E11548AB900E5E9CF /* GetPathsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ACA77B11548AB900E5E9CF /* GetPathsOperation.m */; };
@@ -35,9 +37,20 @@
 		08FB7796FE84155DC02AAC07 /* PNGPOTimizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNGPOTimizer.m; sourceTree = "<group>"; };
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32A70AAB03705E1F00C91783 /* PNGPOTimizer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNGPOTimizer_Prefix.pch; sourceTree = "<group>"; };
+		3758AAE81284CB320012A368 /* CCZFormatHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCZFormatHeader.h; sourceTree = "<group>"; };
+		3778E89C127F18D100879B9D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3778E89E127F1BAC00879B9D /* libPVRTexLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPVRTexLib.a; path = ../PVRTexLib/MacOS/libPVRTexLib.a; sourceTree = SOURCE_ROOT; };
+		3778E8A2127F1BDA00879B9D /* CPVRTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPVRTexture.h; path = ../PVRTexLib/CPVRTexture.h; sourceTree = SOURCE_ROOT; };
+		3778E8A3127F1BDA00879B9D /* CPVRTextureData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPVRTextureData.h; path = ../PVRTexLib/CPVRTextureData.h; sourceTree = SOURCE_ROOT; };
+		3778E8A4127F1BDA00879B9D /* CPVRTextureHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPVRTextureHeader.h; path = ../PVRTexLib/CPVRTextureHeader.h; sourceTree = SOURCE_ROOT; };
+		3778E8A5127F1BDA00879B9D /* Pixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pixel.h; path = ../PVRTexLib/Pixel.h; sourceTree = SOURCE_ROOT; };
+		3778E8A6127F1BDA00879B9D /* PVRException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRException.h; path = ../PVRTexLib/PVRException.h; sourceTree = SOURCE_ROOT; };
+		3778E8A7127F1BDA00879B9D /* PVRTexLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTexLib.h; path = ../PVRTexLib/PVRTexLib.h; sourceTree = SOURCE_ROOT; };
+		3778E8A8127F1BDA00879B9D /* PVRTexLibGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTexLibGlobals.h; path = ../PVRTexLib/PVRTexLibGlobals.h; sourceTree = SOURCE_ROOT; };
+		3778E8A9127F1BDA00879B9D /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTGlobal.h; path = ../PVRTexLib/PVRTGlobal.h; sourceTree = SOURCE_ROOT; };
 		37ACA2B41153CD9500E5E9CF /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		37ACA37B1153E4A900E5E9CF /* ImageOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageOperations.h; sourceTree = "<group>"; };
-		37ACA37C1153E4A900E5E9CF /* ImageOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageOperations.m; sourceTree = "<group>"; };
+		37ACA37C1153E4A900E5E9CF /* ImageOperations.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageOperations.mm; sourceTree = "<group>"; };
 		37ACA59E115409A700E5E9CF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		37ACA6401154156C00E5E9CF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		37ACA77A11548AB800E5E9CF /* GetPathsOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPathsOperation.h; sourceTree = "<group>"; };
@@ -57,6 +70,8 @@
 				37ACA59F115409A700E5E9CF /* AppKit.framework in Frameworks */,
 				37ACA6411154156C00E5E9CF /* QuartzCore.framework in Frameworks */,
 				37ACA86E11548B0C00E5E9CF /* Cocoa.framework in Frameworks */,
+				3778E89D127F18D100879B9D /* libz.dylib in Frameworks */,
+				3778E89F127F1BAC00879B9D /* libPVRTexLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +85,7 @@
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
+				3778E89C127F18D100879B9D /* libz.dylib */,
 			);
 			name = PNGPOTimizer;
 			sourceTree = "<group>";
@@ -81,7 +97,8 @@
 				32A70AAB03705E1F00C91783 /* PNGPOTimizer_Prefix.pch */,
 				08FB7796FE84155DC02AAC07 /* PNGPOTimizer.m */,
 				37ACA37B1153E4A900E5E9CF /* ImageOperations.h */,
-				37ACA37C1153E4A900E5E9CF /* ImageOperations.m */,
+				37ACA37C1153E4A900E5E9CF /* ImageOperations.mm */,
+				3758AAE81284CB320012A368 /* CCZFormatHeader.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -89,6 +106,8 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3778E8A0127F1BBA00879B9D /* libPVRTexLib Headers */,
+				3778E89E127F1BAC00879B9D /* libPVRTexLib.a */,
 				08FB779EFE84155DC02AAC07 /* Foundation.framework */,
 				37ACA2B41153CD9500E5E9CF /* ApplicationServices.framework */,
 				37ACA59E115409A700E5E9CF /* AppKit.framework */,
@@ -104,6 +123,21 @@
 				8DD76FA10486AA7600D96B5E /* PNGPOTimizer */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3778E8A0127F1BBA00879B9D /* libPVRTexLib Headers */ = {
+			isa = PBXGroup;
+			children = (
+				3778E8A2127F1BDA00879B9D /* CPVRTexture.h */,
+				3778E8A3127F1BDA00879B9D /* CPVRTextureData.h */,
+				3778E8A4127F1BDA00879B9D /* CPVRTextureHeader.h */,
+				3778E8A5127F1BDA00879B9D /* Pixel.h */,
+				3778E8A6127F1BDA00879B9D /* PVRException.h */,
+				3778E8A7127F1BDA00879B9D /* PVRTexLib.h */,
+				3778E8A8127F1BDA00879B9D /* PVRTexLibGlobals.h */,
+				3778E8A9127F1BDA00879B9D /* PVRTGlobal.h */,
+			);
+			name = "libPVRTexLib Headers";
 			sourceTree = "<group>";
 		};
 		37ACA7721154444200E5E9CF /* PathOps */ = {
@@ -151,7 +185,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "PNGPOTimizer" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* PNGPOTimizer */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -167,7 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F9A0486AA7600D96B5E /* PNGPOTimizer.m in Sources */,
-				37ACA37D1153E4A900E5E9CF /* ImageOperations.m in Sources */,
+				37ACA37D1153E4A900E5E9CF /* ImageOperations.mm in Sources */,
 				37ACA77E11548AB900E5E9CF /* GetPathsOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -187,6 +228,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PNGPOTimizer_Prefix.pch;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../PVRTexLib/MacOS\"",
+				);
 				PRODUCT_NAME = PNGPOTimizer;
 			};
 			name = Debug;
@@ -200,6 +245,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PNGPOTimizer_Prefix.pch;
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../PVRTexLib/MacOS\"",
+				);
 				PRODUCT_NAME = PNGPOTimizer;
 			};
 			name = Release;
@@ -207,26 +256,28 @@
 		1DEB927908733DD40010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		1DEB927A08733DD40010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};

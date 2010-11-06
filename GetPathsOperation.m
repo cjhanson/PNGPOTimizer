@@ -86,41 +86,64 @@
 // -------------------------------------------------------------------------------
 - (void)main
 {	
+	if ([self isCancelled])
+		return;
+	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    // iterate through the contents of "rootPath"
-	NSString* sourceDirectoryFilePath = nil;
-	NSDirectoryEnumerator* sourceDirectoryFilePathEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:rootPath];
-
-	while (sourceDirectoryFilePath = [sourceDirectoryFilePathEnumerator nextObject])
-	{
-		if ([self isCancelled])
-		{
-			break;	// user cancelled this operation
-		}
-				
-		NSDictionary *sourceDirectoryFileAttributes = [sourceDirectoryFilePathEnumerator fileAttributes];
+	
+	if(![[rootPath pathExtension] isEqualToString:@""]){
+		NSOperation *op = (NSOperation *)[[opClass alloc] initWithPath:rootPath];
+		[op setQueuePriority: 2.0];	// second priority
+		[queue addOperation: op];	// this will start the load operation
+		[op release];
 		
-		NSString *sourceDirectoryFileType = [sourceDirectoryFileAttributes objectForKey:NSFileType];
-		
-		if ([sourceDirectoryFileType isEqualToString:NSFileTypeRegular] == YES)
-		{
-			NSString *fullSourceDirectoryFilePath = [rootPath stringByAppendingPathComponent:sourceDirectoryFilePath];
-			if (fullSourceDirectoryFilePath)
-			{
-				NSOperation *op = (NSOperation *)[[opClass alloc] initWithPath:fullSourceDirectoryFilePath];
-				[op setQueuePriority: 2.0];	// second priority
-				[queue addOperation: op];	// this will start the load operation
-				[op release];
-			
-				if ([self isCancelled])
-				{
-					break;	// user cancelled this operation
-				}
-			}
-		}
+		[pool drain];
+		return;
 	}
 	
+	NSURL *directoryURL = [NSURL fileURLWithPath:rootPath isDirectory:YES];
+	
+	NSArray *keys = [NSArray arrayWithObjects:NSURLIsDirectoryKey, NSURLIsPackageKey, NSURLLocalizedNameKey, nil];
+	
+	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+										 enumeratorAtURL:directoryURL
+										 includingPropertiesForKeys:keys
+										 options:(NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles)
+										 errorHandler:^(NSURL *url, NSError *error) {
+											 // Handle the error.
+											 // Return YES if the enumeration should continue after the error.
+											 return YES;
+										 }];
+	
+	for (NSURL *url in enumerator) {
+		// Error-checking is omitted for clarity.
+		
+		NSNumber *isDirectory = nil;
+		[url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+		
+		if ([isDirectory boolValue]) {
+			NSString *localizedName = nil;
+			[url getResourceValue:&localizedName forKey:NSURLLocalizedNameKey error:NULL];
+			
+			NSNumber *isPackage = nil;
+			[url getResourceValue:&isPackage forKey:NSURLIsPackageKey error:NULL];
+			
+			if ([isPackage boolValue]) {
+				//NSLog(@"Package at %@", localizedName);
+			}
+			else {
+				//NSLog(@"Directory at %@", localizedName);
+			}
+		}else{
+			//NSLog(@"File at %@", url);
+			
+			NSOperation *op = (NSOperation *)[[opClass alloc] initWithPath:[url path]];
+			[op setQueuePriority: 2.0];	// second priority
+			[queue addOperation: op];	// this will start the load operation
+			[op release];
+		}
+	}
+
 	[pool release];
 }
 

@@ -13,6 +13,77 @@
 #import <AppKit/AppKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "CCZFormatHeader.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <zlib.h>
+#include <architecture/byte_order.h>
+
+#import "PVRTexLib.h"
+using namespace pvrtexlib;
+
+#define REMOTE_TMP_FILE 1
+
+static int SaveBitmapImageToPVR(NSBitmapImageRep *bitmapImage, NSString *outPath)
+{
+	PVRTRY {
+		uint width = bitmapImage.size.width;
+		uint height = bitmapImage.size.height;
+		unsigned char *pPixelData = bitmapImage.bitmapData;
+		
+		// get the utilities instance
+		PVRTextureUtilities *PVRU = PVRTextureUtilities::getPointer();
+		// make a CPVRTexture instance with data passed
+		CPVRTexture sOriginalTexture(
+									 width,		// u32Width
+									 height,	// u32Height
+									 0,			// u32MipMapCount 
+									 1,			// u32NumSurfaces 
+									 false,		// bBorder
+									 false,		// bTwiddled 
+									 false,		// bCubeMap
+									 false,		// bVolume
+									 false,		// bFalseMips
+									 true,		// bHasAlpha
+									 false,		// bVerticallyFlipped
+									 eInt8StandardPixelType,	// ePixelType
+									 0.0f,		// fNormalMap,
+									 pPixelData	// pPixelData
+									 );
+		// make an empty header for the destination of the preprocessing
+		// copying the existing texture header settings
+		CPVRTextureHeader sProcessHeader(sOriginalTexture.getHeader());
+		PVRU->ProcessRawPVR(
+							sOriginalTexture,//sInputTexture
+							sProcessHeader,	//sProcessHeader
+							false,			//bDoBleeding
+							0.0f,			//fBleedRed
+							0.0f,			//fBleedGreen
+							0.0f,			//fBleedBlue
+							true,			//bPremultAlpha
+							eRESIZE_BICUBIC	//eResizeMode
+							);
+		
+		// create texture to encode to
+		CPVRTexture sCompressedTexture(sOriginalTexture.getHeader());
+		sCompressedTexture.setPixelType(OGL_BGRA_8888);
+		
+		PVRU->CompressPVR(sOriginalTexture,sCompressedTexture);
+		
+		// write to file specified (second param is version. Current is 2.)
+		size_t writeResult = sCompressedTexture.writeToFile([[NSFileManager defaultManager] fileSystemRepresentationWithPath:outPath]);
+		NSLog(@"PVR wrote %d bytes to %@", writeResult, [outPath lastPathComponent]);
+		
+		return 1;
+	} PVRCATCH(myException) {
+		// handle any exceptions here
+		printf("Exception in example 2: %s\n",myException.what());
+		
+		return -1;
+	}
+}
+
 static NSBitmapImageRep *BitmapImageRepFromNSImage(NSImage *nsImage);
 
 static unsigned int nextPOT(unsigned int x)
@@ -67,11 +138,6 @@ NSBitmapImageRep *outputBitmapImageRepFromCIImage(CIImage *ciImage)
 		
         // Compute size of output bitmap.
         NSSize outputBitmapSize = NSMakeSize(POTWide, POTHigh);
-		
-		if(outputBitmapSize.width == extent.size.width && outputBitmapSize.height == extent.size.height){
-			NSLog(@"Bitmap already POT");
-			return nil;
-		}
 		
         // Create a new NSBitmapImageRep that matches the CIImage's extents.
         bitmapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:outputBitmapSize.width pixelsHigh:outputBitmapSize.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:0 bitsPerPixel:0];
@@ -131,17 +197,22 @@ NSBitmapImageRep *outputBitmapImageRepFromCIImage(CIImage *ciImage)
 
 int padImageFilePOT(NSString *filePath)
 {		
-	if([[filePath lastPathComponent] isEqualToString:@"Default.png"]){
-		NSLog(@"Skipping Default.png");
-		return 0;
-	}
-	if([[filePath lastPathComponent] isEqualToString:@"Icon-Home.png"]){
-		NSLog(@"Skipping Icon-Home.png");
-		return 0;
-	}
-	if([[filePath lastPathComponent] isEqualToString:@"Icon-Small.png"]){
-		NSLog(@"Skipping Icon-Small.png");
-		return 0;
+	NSArray *filesToSkip = [NSArray arrayWithObjects:
+							@"iTunesArtwork",
+							@"Default.png",
+							@"Icon.png",
+							@"Icon@2x.png",
+							@"Icon-Small.png",
+							@"Icon-Small@2x.png",
+							@"Icon-Small-50.png",
+							@"Icon-72.png",
+						nil];
+	NSString *fileName	= [filePath lastPathComponent];
+	for(NSString *skipName in filesToSkip){
+		if([skipName isEqualToString:fileName]){
+			NSLog(@"Skipping %@", fileName);
+			return 0;
+		}
 	}
 	
 	NSBitmapImageRep *inputBitmapImageRep	= BitmapImageRepFromNSImage([[[NSImage alloc] initWithContentsOfFile:filePath] autorelease]);
@@ -156,14 +227,102 @@ int padImageFilePOT(NSString *filePath)
 		NSLog(@"Didn't expand image size %@", filePath);
 		return 0;
 	}
-		
-	NSData *outputData					= [outputBitmapImageRep representationUsingType:NSPNGFileType properties:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], NSImageInterlaced, nil]];
 	
-	if(![outputData writeToFile:filePath atomically:YES]){
-		NSLog(@"Failed to write image %@", filePath);
+	NSString *pvrPath	= [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pvr"];
+	int result = SaveBitmapImageToPVR(outputBitmapImageRep, pvrPath);
+	if(result < 1){
+		NSLog(@"Failed to save PVR %@", pvrPath);
 		return 0;
 	}
 	
+	NSData *data			= [[NSData alloc] initWithContentsOfFile:pvrPath];
+#if REMOTE_TMP_FILE	
+	//remove pvr temp file	
+	NSError *saveError;
+	if(![[NSFileManager defaultManager] removeItemAtPath:pvrPath error:&saveError])
+	{
+		NSLog(@"Failed to cleanup temp pvr: %@", pvrPath);
+	}
+#endif
+	
+	if(data){
+		const unsigned char *d = (const unsigned char *)[data bytes];   
+		if(!d){
+			NSLog(@"Failed to load PVR data");
+			[data release];
+			data = nil;
+		}
+		
+		struct CCZHeader *header;
+		uint32 headerSize	= sizeof(*header);
+		NSLog(@"Header size %d", headerSize);
+		
+		uLongf sourceLen	= [data length];
+		uLongf destLen		= compressBound(sourceLen);
+		
+		NSMutableData *compressed = [[NSMutableData alloc] initWithLength:destLen + headerSize];
+		if(!compressed){
+			NSLog(@"Failed to allocate memory for compressed data");
+			[data release];
+			data = nil;
+		}
+		
+		Bytef *md = (Bytef *)[compressed mutableBytes];
+		md += headerSize;
+		
+		if(Z_OK != compress2(md, &destLen, d, sourceLen, Z_BEST_COMPRESSION)){
+			NSLog(@"Failed to allocate memory for compressed data");
+			[compressed release];
+			compressed = nil;
+			[data release];
+			data = nil;
+		}
+		
+		md -= headerSize;
+		
+		NSLog(@"Compressed size w/o header %d, full orig %d, Temp byte size %d", destLen, sourceLen, [compressed length]);
+		
+		compressed.length = destLen+headerSize;
+		
+		header = (struct CCZHeader*) md;
+		header->sig[0] = 'C';
+		header->sig[1] = 'C';
+		header->sig[2] = 'Z';
+		header->sig[3] = '!';
+#if DEBUG		
+		char c[5];
+		c[0]	= header->sig[0];
+		c[1]	= header->sig[1];
+		c[2]	= header->sig[2];
+		c[3]	= header->sig[3];
+		c[4]	= '\0';
+		
+		if(header->sig[0] != 'C' || header->sig[1] != 'C' || header->sig[2] != 'Z' || header->sig[3] != '!'){
+			NSLog(@"cocos2d: Invalid CCZ file");
+		}else{
+			NSLog(@"CCZ Header: %@", [NSString stringWithCString:c encoding:NSASCIIStringEncoding]);
+		}
+#endif		
+		header->len					= OSSwapHostToLittleInt32(sourceLen);
+		header->version				= OSSwapHostToLittleInt32(1);
+		header->compression_type	= OSSwapHostToLittleInt32(CCZ_COMPRESSION_ZLIB);
+		
+		[data release];
+		data = compressed;
+		compressed = nil;
+	}
+	
+	//Save PNG
+	//NSData *data					= [[outputBitmapImageRep representationUsingType:NSPNGFileType properties:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], NSImageInterlaced, nil]] retain];
+	
+	NSString *pvzPath	= [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pvz"];
+	if(![data writeToFile:pvzPath atomically:YES]){
+		NSLog(@"Failed to write PNG image %@", pvzPath);
+		[data release];
+		return 0;
+	}
+	
+	[data release];
 	return 1;
 }
 
@@ -214,7 +373,7 @@ NSString *POTImageDidFinishNotification = @"POTImageDidFinishNotification";
             // verify that this is a file that the Image I/O framework supports
             if (values != NULL)
             {
-                CFTypeRef uti = CFDictionaryGetValue(values, kLSItemContentType);
+                CFTypeRef uti = (CFStringRef)CFDictionaryGetValue(values, kLSItemContentType);
                 if (uti != NULL)
                 {
                     CFArrayRef supportedTypes = CGImageSourceCopyTypeIdentifiers();
@@ -222,12 +381,12 @@ NSString *POTImageDidFinishNotification = @"POTImageDidFinishNotification";
 					
                     for (i = 0; i < typeCount; i++)
                     {
-                        CFStringRef supportedUTI = CFArrayGetValueAtIndex(supportedTypes, i);
+                        CFStringRef supportedUTI = (CFStringRef)CFArrayGetValueAtIndex(supportedTypes, i);
 						
                         // make sure the supported UTI conforms only to "public.image" (this will skip PDF)
                         if (UTTypeConformsTo(supportedUTI, CFSTR("public.image")))
                         {
-                            if (UTTypeConformsTo(uti, supportedUTI))
+                            if (UTTypeConformsTo((CFStringRef)uti, supportedUTI))
                             {
                                 isImageFile = YES;
                                 break;
@@ -298,7 +457,7 @@ NSString *POTImageDidFinishNotification = @"POTImageDidFinishNotification";
 													  [NSNumber numberWithInt:padImageFilePOT(loadPath)], @"result",
 													  nil];
 								
-								NSLog(@"Image processed: %@ %d", [info objectForKey:@"name"], [[info objectForKey:@"result"] intValue]);
+								NSLog(@"Image processed: %@ result: %d", [info objectForKey:@"name"], [[info objectForKey:@"result"] intValue]);
 							}
 							
 							CFRelease(dateRef);
