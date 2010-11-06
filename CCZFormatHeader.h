@@ -27,10 +27,11 @@
 
 // Format header
 struct CCZHeader {
-	uint8_t		sig[4];				// signature. Should be 'CCZ!' 4 bytes
-	uint32_t	version;			// should be 1
-	uint32_t	compression_type;	// See enums below
-	uint32_t	len;				// size of the uncompressed file
+	uint8_t			sig[4];				// signature. Should be 'CCZ!' 4 bytes
+	uint16_t		compression_type;	// See enums below
+	uint16_t		version;			// should be 2
+	uint32_t		reserved;			// Reserverd for users.
+	uint32_t		len;				// size of the uncompressed file
 };
 
 enum {

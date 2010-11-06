@@ -302,10 +302,14 @@ int padImageFilePOT(NSString *filePath)
 		}else{
 			NSLog(@"CCZ Header: %@", [NSString stringWithCString:c encoding:NSASCIIStringEncoding]);
 		}
-#endif		
+#endif	
+		uint32_t myFlags			= 0;
+		myFlags						|= 0x1;//First flag means should parse flag
+		myFlags						|= 0x2;//Second flag means alpha premultiplied
 		header->len					= OSSwapHostToBigInt32(sourceLen);
-		header->version				= OSSwapHostToBigInt32(1);
-		header->compression_type	= OSSwapHostToBigInt32(CCZ_COMPRESSION_ZLIB);
+		header->version				= OSSwapHostToBigInt16(2);
+		header->compression_type	= OSSwapHostToBigInt16(CCZ_COMPRESSION_ZLIB);
+		header->reserved			= OSSwapHostToBigInt32(myFlags);
 		
 		[data release];
 		data = compressed;
@@ -317,7 +321,7 @@ int padImageFilePOT(NSString *filePath)
 	
 	NSString *pvzPath	= [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pvz"];
 	if(![data writeToFile:pvzPath atomically:YES]){
-		NSLog(@"Failed to write PNG image %@", pvzPath);
+		NSLog(@"Failed to write output image %@", pvzPath);
 		[data release];
 		return 0;
 	}
