@@ -336,9 +336,9 @@ int padImageFilePOT(NSString *filePath)
 	//Save PNG
 	//NSData *data					= [[outputBitmapImageRep representationUsingType:NSPNGFileType properties:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], NSImageInterlaced, nil]] retain];
 	
-	NSString *pvzPath	= [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pvz"];
-	if(![data writeToFile:pvzPath atomically:YES]){
-		NSLog(@"Failed to write output image %@", pvzPath);
+	NSString *cczPath	= [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"pvr.ccz"];
+	if(![data writeToFile:cczPath atomically:YES]){
+		NSLog(@"Failed to write output image %@", cczPath);
 		[data release];
 		return 0;
 	}
