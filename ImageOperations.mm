@@ -78,7 +78,8 @@ static int SaveBitmapImageToPVR(NSBitmapImageRep *bitmapImage, NSString *outPath
 							0.0f,			//fBleedRed
 							0.0f,			//fBleedGreen
 							0.0f,			//fBleedBlue
-							true,			//bPremultAlpha
+//NOTE: Although we do want the alpha output premultiplied, the NSBitmapImageRep is already premultiplied							
+							false,			//bPremultAlpha
 							eRESIZE_BICUBIC	//eResizeMode
 							);
 		
