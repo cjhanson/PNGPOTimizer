@@ -24,6 +24,18 @@
  * 
  */
 
+
+//
+// ALTERED
+// Fri Apr 15 16:08:33 CEST 2011
+// Espen Overaae (minthos@gmail.com)
+// Applics AS
+//
+
+
+
+extern int g_pixelFormat;
+
 #include "ImageOperations.h"
 #import <Foundation/Foundation.h>
 #import <ApplicationServices/ApplicationServices.h>
@@ -42,15 +54,18 @@ using namespace pvrtexlib;
 
 #define REMOTE_TMP_FILE 1
 
+
+
 static int SaveBitmapImageToPVR(NSBitmapImageRep *bitmapImage, NSString *outPath)
 {
 	PVRTRY {
 		uint width = bitmapImage.size.width;
 		uint height = bitmapImage.size.height;
 		unsigned char *pPixelData = bitmapImage.bitmapData;
-		
+		        
 		// get the utilities instance
-		PVRTextureUtilities *PVRU = PVRTextureUtilities::getPointer();
+		PVRTextureUtilities sPVRU = PVRTextureUtilities();
+        PVRTextureUtilities *PVRU = &sPVRU;
 		// make a CPVRTexture instance with data passed
 		CPVRTexture sOriginalTexture(
 									 width,		// u32Width
@@ -85,7 +100,39 @@ static int SaveBitmapImageToPVR(NSBitmapImageRep *bitmapImage, NSString *outPath
 		
 		// create texture to encode to
 		CPVRTexture sCompressedTexture(sOriginalTexture.getHeader());
-		sCompressedTexture.setPixelType(OGL_BGRA_8888);
+        
+        pvrtexlib::PixelType pixel_format = OGL_RGBA_8888;
+        
+        if (g_pixelFormat == 1){
+            pixel_format = OGL_PVRTC2;
+            NSLog(@"using pixel format OGL_PVRTC2");
+        }
+        else if(g_pixelFormat == 2){
+            pixel_format = OGL_PVRTC4;
+            NSLog(@"using pixel format OGL_PVRTC4");
+        }
+        else if(g_pixelFormat == 3){
+            pixel_format = OGL_RGBA_8888;
+            NSLog(@"using pixel format OGL_RGBA_8888");
+        }
+        else if(g_pixelFormat == 4){
+            pixel_format = OGL_RGBA_4444;
+            NSLog(@"using pixel format OGL_RGBA_4444");
+        }
+        else if(g_pixelFormat == 5){
+            pixel_format = OGL_RGBA_5551;
+            NSLog(@"using pixel format OGL_RGBA_5551");
+        }
+        else if(g_pixelFormat == 6){
+            pixel_format = OGL_RGB_565;
+            NSLog(@"using pixel format OGL_RGB_565");
+        }
+        else{
+            pixel_format = OGL_RGBA_8888;
+            NSLog(@"using default pixel format OGL_RGBA_8888");
+        }
+        
+		sCompressedTexture.setPixelType(pixel_format);
 		
 		PVRU->CompressPVR(sOriginalTexture,sCompressedTexture);
 		
@@ -321,6 +368,7 @@ int padImageFilePOT(NSString *filePath)
 			NSLog(@"CCZ Header: %@", [NSString stringWithCString:c encoding:NSASCIIStringEncoding]);
 		}
 #endif	
+                
 		uint32_t myFlags			= 0;
 		myFlags						|= 0x1;//First flag means should parse flag
 		myFlags						|= 0x2;//Second flag means alpha premultiplied
