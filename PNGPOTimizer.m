@@ -24,23 +24,60 @@
  * 
  */
 
+
+//
+// ALTERED
+// Fri Apr 15 16:08:33 CEST 2011
+// Espen Overaae (minthos@gmail.com)
+// Applics AS
+//
+
+
+
 #import <Foundation/Foundation.h>
+
 #import "GetPathsOperation.h"
 #import "ImageOperations.h"
 
 NSString *getStringPathFromCString(const char *path);
 
-int main (int argc, const char * argv[]) {
+int g_pixelFormat = 0;
+
+int main (int argc, const char * argv[]) {    
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	NSOperationQueue *opQueue	= [[NSOperationQueue alloc] init];
 	Class opClass				= [POTImageOperation class];
     // insert code here...
+    
+    if (argc == 1) {
+        printf("\nSupported arguments:\n");
+        printf("[--pvrtc2] [--pvrtc4] [--rgba8888] [--rgba4444] [--rgba5551] [--rgb565] ");
+        printf("[file ...]\n");
+        printf("\nOrigin:\nOriginally by CJ Hanson (Hanson Interactive)\n");
+        printf("Modified by Espen Overaae (Applics AS)\n");
+        printf("Linked against POWERVR SDK (Imagination Technologies)\n");
+    }
+    
 	for(int i=1; i<argc; i++){
 		NSAutoreleasePool *loopPool = [NSAutoreleasePool new];
 		NSString *path				= [NSString stringWithCString:argv[i] encoding:NSUTF8StringEncoding];
-		NSOperation *anOp			= [[[GetPathsOperation alloc] initWithRootPath:path operationClass:opClass queue:opQueue] autorelease];
-		[opQueue addOperation:anOp];
+        if ([path isEqualToString:@"--pvrtc2"])
+            g_pixelFormat = 1;
+        else if([path isEqualToString:@"--pvrtc4"])
+            g_pixelFormat = 2;
+        else if([path isEqualToString:@"--rgba8888"])
+            g_pixelFormat = 3;
+        else if([path isEqualToString:@"--rgba4444"])
+            g_pixelFormat = 4;
+        else if([path isEqualToString:@"--rgba5551"])
+            g_pixelFormat = 5;
+        else if([path isEqualToString:@"--rgb565"])
+            g_pixelFormat = 6;
+        else {
+            NSOperation *anOp = [[[GetPathsOperation alloc] initWithRootPath:path operationClass:opClass queue:opQueue] autorelease];
+            [opQueue addOperation:anOp];
+        }
 		[loopPool drain];
 	}
 	
